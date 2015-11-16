@@ -1,8 +1,12 @@
 GeoJSON-Attribute-Cleaner
 =========================
 
-Simple web based attribute cleaner for reducing GeoJSON file size. 
-Removes every attribute from a GeoJSON except country ID and country name. Also removes whitespace.
+
+Fork from GeoJSON-Attribute-Cleaner by Pimentoso, a simple web based attribute cleaner for reducing GeoJSON file size.
+
+Adds some new options: filters features by property values and removes every attribute from a GeoJSON except the fields selected by users (country ID and country name by default).
+
+Also removes whitespace.
 Input must be a valid JSON.
 
 ## Building and reducing a GeoJSON on MacOSX

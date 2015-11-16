@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title>GeoJSON Attribute Cleaner</title>
+	<title>GeoJSON Attribute Cleaner And Filter</title>
 	<style>
 		* { font-family: Arial, Helvetica, sans-serif; }
 	</style>
@@ -49,6 +49,19 @@
 			<option value="postal">2-letter code</option>
 			<option value="adm0_a3" selected="selected">3-letter code</option>
 			<option value="iso_3166_2">US-XX code (for the United States)</option>
+		</select>
+	</p>
+	<p>
+	    Select filter property:
+	    <select id="select_filter">
+	    	<option>no filter</option>
+			<option value="continent" selected="selected">continent</option>
+		</select>
+	    
+	</p>
+	<p>
+		Set filter value:
+		<input type="text" id="filter_value" value="Europe" />
 		</select>
 	</p>
 	<input type="button" id="button-go" onclick="javascript:process();" value="Process" style="margin-left: 100px; width: 300px;" /> 
