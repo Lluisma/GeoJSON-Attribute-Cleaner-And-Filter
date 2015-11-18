@@ -12,11 +12,11 @@ Input must be a valid JSON.
 ## Quick guide to clean and filter a GeoJSON:
 
 - Open the produced JSON file in a text editor, and paste it in the GeoJSON Attribute Cleaner. 
-- Click ''Get Properties''.
-- Select items on ''Properties preserved'.
-- Select one option on ''Filter property'' (optional) and click ''Get Values''.
-- Select one of the options in ''Filer value'' or write it.
-- Click 'Process'.
+- Click *Get Properties*.
+- Select items on *Properties preserved*.
+- Select one option on *Filter property* (optional) and click *Get Values*.
+- Select one of the options in *Filter value* or write it.
+- Click *Process*.
 - Use the resulting reduced JSON for your maps.
 
 ## Example output
