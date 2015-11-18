@@ -1,33 +1,23 @@
-GeoJSON-Attribute-Cleaner
-=========================
+GeoJSON-Attribute-Cleaner-And-Filter
+====================================
 
 
 Fork from GeoJSON-Attribute-Cleaner by Pimentoso, a simple web based attribute cleaner for reducing GeoJSON file size.
 
-Adds some new options: filters features by property values and removes every attribute from a GeoJSON except the fields selected by users (country ID and country name by default).
+Adds some new options: filters features by property values and removes every attribute from a GeoJSON except the fields selected by users (and country name by default).
 
 Also removes whitespace.
 Input must be a valid JSON.
 
-## Building and reducing a GeoJSON on MacOSX
+## Quick guide to clean and filter a GeoJSON:
 
-Quick guide to produce a GeoJSON:
-
-- Install GDAL
-```
-brew install gdal
-```
-
-- Download the shapefile for world countries from NaturalEarthData. [Like this one](http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_map_units.zip)
-- Unzip it.
-- Navigate to the unzipped folder using the terminal.
-- Run `ogr2ogr` to convert the vector shapefile to a GeoJSON.
-```
-ogr2ogr -f GeoJSON -lco COORDINATE_PRECISION=3 -simplify 0.04 temp.json ne_50m_admin_0_map_units.shp
-```
-- Using the linked shapefile, this command will create a geoJSON of about 1.1 MB. You can specify lower simplify values to produce better maps but even bigger files. See the [ogr2ogr command line reference](http://www.gdal.org/ogr2ogr.html) for details.
-- Open the produced JSON file in a text editor, and paste it in the GeoJSON Attribute Cleaner. Click process.
-- Use the resulting JSON for your maps. For the example GeoJSON, size is reduced to 637 KB.
+- Open the produced JSON file in a text editor, and paste it in the GeoJSON Attribute Cleaner. 
+- Click ''Get Properties''.
+- Select items on ''Properties preserved'.
+- Select one option on ''Filter property'' (optional) and click ''Get Values''.
+- Select one of the options in ''Filer value'' or write it.
+- Click 'Process'.
+- Use the resulting reduced JSON for your maps.
 
 ## Example output
 Input:
@@ -42,5 +32,6 @@ Output:
 
 ## References
 
+- https://github.com/Pimentoso/GeoJSON-Attribute-Cleaner
 - http://blog.thematicmapping.org/2012/11/how-to-minify-geojson-files.html
 - http://bost.ocks.org/mike/map/
