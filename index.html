@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -8,64 +8,122 @@
 	</style>
 	<script type="text/javascript">
 
-	function process() {
-		var text_area_input = document.getElementById('geo-input');
-		var select_id = document.getElementById('select_id_field');
-		var geojson = text_area_input.value;
-		var converted = JSON.parse(geojson);
-
-		var id_field = select_id.value;
-		var name_field = 'name'; // field containing country name to keep
-
-		for (var i = 0; i < converted.features.length; i++) {
-			var feat = converted.features[i];
-			var country_id = '';
-			for (var prop in feat.properties) {
-					if (prop == id_field) {
-						country_id = feat.properties[prop];
-						feat["id"] = country_id;
-					}
-		      if (prop != name_field) {
-		      	delete feat.properties[prop];
-		      }
-		  }
+		var presProp, filtProp, filtVal, filtVals, geoinput, geooutput;  
+		
+		window.onload = function() {
+			presProp  = document.getElementById('preserved_prop');
+	  		filtProp  = document.getElementById('filter_prop');
+	  		filtVal   = document.getElementById('filter_value');
+	  		filtVals  = document.getElementById('filter_values');
+	  		geoinput  = document.getElementById('geo-input');
+	  	    geooutput = document.getElementById('geo-output');
 		}
 
-	  var reduced_geojson = JSON.stringify(converted);
-	  var text_area_output = document.getElementById('geo-output');
-	  text_area_output.value = reduced_geojson;
-	}
+	  	function properties() {
+			// * Remove items
+	  		for (var i = presProp.length - 1; i>=0; i--) {
+				presProp.remove(i);
+				filtProp.remove(i);
+	  		}
+			var converted  = JSON.parse( geoinput.value );
+			var feat       = converted.features[0];
+			var j = 0;
+			for (var prop in feat.properties) {				  
+				var opt = document.createElement('option');
+					opt.value = prop;
+					opt.innerHTML = prop;
+					presProp.appendChild(opt);
+					if (prop=="iso_a2") { presProp.selectedIndex = j; }
+				var opt2 = document.createElement('option');
+					opt2.value = prop;
+					opt2.innerHTML = prop;
+					filtProp.appendChild(opt2);
+					if (prop=="continent") { filtProp.selectedIndex = j; }
+				j++;
+	  		}
+		}
+	
+		function values() {
+			// * Remove items
+	  		for (var i = filtVals.length - 1; i>=0; i--) {
+				filtVals.remove(i);
+	  		}
+			var arrValors = new Array();
+			var filtPropVal = filtProp.value;
+			var converted = JSON.parse( geoinput.value );
+			for (var i=0; i<converted.features.length; i++) {
+		  		var feat = converted.features[i];
+		  		var val  = feat.properties[ filtPropVal ];
+		  		if (arrValors.indexOf(val) < 0) { 
+			  		arrValors.push(val);
+			  		var opt = document.createElement('option');
+						opt.value = val;
+						opt.innerHTML = val;
+					filtVals.appendChild(opt);
+		  		}
+			}
+		}
+	
+		function process() {
+			var arrPresProp = presProp.value.split(",");
+		 	    arrPresProp.push("name"); // * Field containing country name to keep
+			var filtPropertie = filtProp.value;
+			var filtValue     = filtVal.value;
+			var converted     = JSON.parse( geoinput.value );
+	
+			var i = 0;
+			var feat;
+			while (feat = converted.features[i]) {
+		  		if (feat.properties.hasOwnProperty( filtPropertie ) && (feat.properties[ filtPropertie ] == filtValue)) {
+  					for (var prop in feat.properties) {				  
+   		      		if ( arrPresProp.indexOf( prop ) < 0) {
+  		      			delete feat.properties[prop];
+   		      		}
+   		    		}
+        			i++;  
+          		} else {
+        			converted.features.splice(i,1);
+          		}
+			}	
+			geooutput.value = JSON.stringify( converted );
+		}
 
 	</script>
 </head>
 <body>
-	<h2>GeoJSON Attribute Cleaner</h2>
+	<h2>GeoJSON Attribute Cleaner and Filter</h2>
 	<p>Paste GeoJSON here:</p>
 	<textarea id="geo-input" rows="20" cols="100"></textarea>
 	<br />
+	
+	<style>
+		table			{	width:720px; border:1px solid #ccc; }
+		td				{	text-align:center; vertical-align:top; }
+		select, input	{	width:220px; }
+		
+	</style>
+	
 	<p>
-		Select country ID: 
-		<select id="select_id_field">
-			<option value="postal">2-letter code</option>
-			<option value="adm0_a3" selected="selected">3-letter code</option>
-			<option value="iso_3166_2">US-XX code (for the United States)</option>
-		</select>
+		<input type="button" id="button-get" onclick="javascript:properties();" value="Get Properties" style="margin-left: 100px; width: 300px;" />
 	</p>
+	
+	<table>
+		<tr><td colspan="3"></td></tr>
+		<tr><th>Properties preserved</th>
+			<th>Filter property</th>
+			<th>Filter value</th></tr>
+		<tr><td><select id="preserved_prop" size="10" multiple></select></td>
+			<td><select id="filter_prop"></select>
+				<p><input type="button" id="button-get" onclick="javascript:values();" value="Get Values >>" style="width: 220px;" /></p></td>
+			<td><input id="filter_value" list="filter_values"/>
+				<datalist id="filter_values"></datalist></td></tr>
+	</table>
+	 
+	<br />	
 	<p>
-	    Select filter property:
-	    <select id="select_filter">
-	    	<option>no filter</option>
-			<option value="continent" selected="selected">continent</option>
-		</select>
-	    
+		<input type="button" id="button-go"  onclick="javascript:process();" value="Process" style="margin-left: 100px; width: 300px;" />
 	</p>
-	<p>
-		Set filter value:
-		<input type="text" id="filter_value" value="Europe" />
-		</select>
-	</p>
-	<input type="button" id="button-go" onclick="javascript:process();" value="Process" style="margin-left: 100px; width: 300px;" /> 
-	<br />
+
 	<p>Cleaned output:</p>
 	<textarea id="geo-output" rows="20" cols="100"></textarea>
 	<p style="font-size: 0.7em; font-style: italic;">Copy and paste this result in a JSON file.</p>
