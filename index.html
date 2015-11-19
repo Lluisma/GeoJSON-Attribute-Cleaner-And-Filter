@@ -80,11 +80,11 @@
 	
 			var i = 0;
 			var feat;
-console.log(arrPresProp);
+
 			while (feat = converted.features[i]) {
 		  		if ((filtProperty==false) || (feat.properties.hasOwnProperty( filtProperty ) && (feat.properties[ filtProperty ]==filtValue))) {
   					for (var prop in feat.properties) {
-console.log(prop);  										  
+  										  
    		      		if ( arrPresProp.indexOf( prop ) < 0) {
   		      			delete feat.properties[prop];
    		      		}
