@@ -23,10 +23,10 @@
 			// * Remove items
 	  		for (var i = presProp.length - 1; i>=0; i--) {
 				presProp.remove(i);
+			}
+			for (var i = filtProp.length - 1; i>0; i--) {
 				filtProp.remove(i);
 	  		}
-	  		var opt0 = document.createElement('option');
-			filtProp.appendChild(opt0);
 			
 			var converted  = JSON.parse( geoinput.value );
 			var feat       = converted.features[0];
@@ -67,17 +67,24 @@
 		}
 	
 		function process() {
-			var arrPresProp = presProp.value.split(",");
-		 	    arrPresProp.push("name"); // * Field containing country name to keep
-			var filtPropertie = filtProp.value;
-			var filtValue     = filtVal.value;
-			var converted     = JSON.parse( geoinput.value );
+			var arrPresProp = new Array();
+			for (i = 0; i < presProp.length; i++) {
+				if (presProp.options[i].selected) {
+					arrPresProp[i] = presProp.options[i].value;
+				}
+			}
+	 	    arrPresProp.push("name"); // * Field containing country name to keep
+			var filtProperty = filtProp.value;
+			var filtValue    = filtVal.value;
+			var converted    = JSON.parse( geoinput.value );
 	
 			var i = 0;
 			var feat;
+console.log(arrPresProp);
 			while (feat = converted.features[i]) {
-		  		if (feat.properties.hasOwnProperty( filtPropertie ) && (feat.properties[ filtPropertie ] == filtValue)) {
-  					for (var prop in feat.properties) {				  
+		  		if ((filtProperty==false) || (feat.properties.hasOwnProperty( filtProperty ) && (feat.properties[ filtProperty ]==filtValue))) {
+  					for (var prop in feat.properties) {
+console.log(prop);  										  
    		      		if ( arrPresProp.indexOf( prop ) < 0) {
   		      			delete feat.properties[prop];
    		      		}
@@ -95,7 +102,13 @@
 <body>
 	<h2>GeoJSON Attribute Cleaner and Filter</h2>
 	<p>Paste GeoJSON here:</p>
-	<textarea id="geo-input" rows="20" cols="100"></textarea>
+	<textarea id="geo-input" rows="20" cols="100">
+		
+		{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"scalerank":1,"featurecla":"Admin-0mapunit","labelrank":5.0,"sovereignt":"Barbados","sov_a3":"BRB","adm0_dif":0.0,"level":2.0,"type":"Sovereigncountry","admin":"Barbados","adm0_a3":"BRB","geou_dif":0.0,"geounit":"Barbados","gu_a3":"BRB","su_dif":0.0,"subunit":"Barbados","su_a3":"BRB","brk_diff":0.0,"name":"Barbados","name_long":"Barbados","brk_a3":"BRB","brk_name":"Barbados","brk_group":null,"abbrev":"Barb.","postal":"BB","formal_en":"Barbados","formal_fr":null,"note_adm0":null,"note_brk":null,"name_sort":"Barbados","name_alt":null,"mapcolor7":4.0,"mapcolor8":1.0,"mapcolor9":5.0,"mapcolor13":3.0,"pop_est":284589.0,"gdp_md_est":5425.0,"pop_year":-99.0,"lastcensus":2010.0,"gdp_year":-99.0,"economy":"6.Developingregion","income_grp":"2.Highincome:nonOECD","wikipedia":-99.0,"fips_10":null,"iso_a2":"BB","iso_a3":"BRB","iso_n3":"052","un_a3":"052","wb_a2":"BB","wb_a3":"BRB","woe_id":-99.0,"adm0_a3_is":"BRB","adm0_a3_us":"BRB","adm0_a3_un":-99.0,"adm0_a3_wb":-99.0,"continent":"NorthAmerica","region_un":"Americas","subregion":"Caribbean","region_wb":"LatinAmerica&Caribbean","name_len":8.0,"long_len":8.0,"abbrev_len":5.0,"tiny":3.0,"homepart":1.0},"geometry":{"type":"Polygon","coordinates":[[[-59.493,13.082],[-59.611,13.102],[-59.647,13.303],[-59.592,13.318],[-59.428,13.153],[-59.493,13.082]]]}}]}
+
+		
+		
+	</textarea>
 	<br />
 	
 	<style>
@@ -115,7 +128,9 @@
 			<th>Filter property</th>
 			<th>Filter value</th></tr>
 		<tr><td><select id="preserved_prop" size="10" multiple></select></td>
-			<td><select id="filter_prop"></select>
+			<td><select id="filter_prop">
+					<option></option>
+				</select>
 				<p><input type="button" id="button-get" onclick="javascript:values();" value="Get Values >>" style="width: 220px;" /></p></td>
 			<td><input id="filter_value" list="filter_values"/>
 				<datalist id="filter_values"></datalist></td></tr>
