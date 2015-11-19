@@ -9,7 +9,7 @@ Adds some new options: filters features by property values and removes every att
 Also removes whitespace.
 Input must be a valid JSON.
 
-## Quick guide to clean and filter a GeoJSON:
+## Quick guide to clean and filter a GeoJSON
 
 - Open the produced JSON file in a text editor, and paste it in the GeoJSON Attribute Cleaner. 
 - Click *Get Properties*.
