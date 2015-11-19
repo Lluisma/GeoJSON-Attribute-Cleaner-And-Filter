@@ -25,6 +25,9 @@
 				presProp.remove(i);
 				filtProp.remove(i);
 	  		}
+	  		var opt0 = document.createElement('option');
+			filtProp.appendChild(opt0);
+			
 			var converted  = JSON.parse( geoinput.value );
 			var feat       = converted.features[0];
 			var j = 0;
@@ -38,7 +41,6 @@
 					opt2.value = prop;
 					opt2.innerHTML = prop;
 					filtProp.appendChild(opt2);
-					if (prop=="continent") { filtProp.selectedIndex = j; }
 				j++;
 	  		}
 		}
